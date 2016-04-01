@@ -39,6 +39,7 @@
     "karma-chrome-launcher": "^0.2.3",
     "karma-jasmine": "^0.3.8",
     "karma-typescript-preprocessor": "0.0.21",
+    "typescript": "^1.8.9",
     "typings": "^0.7.11"
   }
 }

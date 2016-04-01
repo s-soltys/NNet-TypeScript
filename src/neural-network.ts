@@ -9,7 +9,7 @@ export class NeuralNetwork {
     private realLearningRate: number = NaN;
     private hiddenLayers: number = 2;
 
-    constructor(inputs: number, outputs: number, neuronsPerLayer: number): void {
+    constructor(inputs: number, outputs: number, neuronsPerLayer: number = 50) {
         this.layers = [];
 
         this.layers[0] = this.createLayer(neuronsPerLayer, inputs, this.neuronalBias, this.initialWeightRange);
@@ -53,7 +53,7 @@ export class NeuralNetwork {
         return layerOutputs[layerOutputs.length - 1];
     }
 
-    train(patterns: TrainingPattern[], epochs: number, learningRate: number, targetMSE: number = 0.02): number {
+    train(patterns: TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): number {
         if (isNaN(this.realLearningRate)) {
             this.realLearningRate = learningRate;
         }

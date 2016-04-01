@@ -9,7 +9,7 @@ export class NeuralNetwork {
     private realLearningRate: number = NaN;
     private hiddenLayers: number = 2;
 
-    createNetwork(inputs: number, outputs: number, neuronsPerLayer: number): void {
+    constructor(inputs: number, outputs: number, neuronsPerLayer: number): void {
         this.layers = [];
 
         this.layers[0] = this.createLayer(neuronsPerLayer, inputs, this.neuronalBias, this.initialWeightRange);

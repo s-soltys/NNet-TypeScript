@@ -7,10 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "preinstall": "npm install autodts",
-    "postinstall": "autodts link",
-    "prepublish": "tsc && autodts generate",
-    "test": "node test/test.js"
+    "test": "./node_modules/.bin/intern-client config=intern"
   },
   "typescript": {
     "definition": "index.d.ts"
@@ -34,6 +31,7 @@
     "autodts": "^0.0.6"
   },
   "devDependencies": {
+    "intern": "^3.0.6",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.3",

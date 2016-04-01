@@ -1,5 +1,5 @@
 import {Neuron} from './neuron';
-import {TrainingPattern} from './trainingpattern';
+import {TrainingPattern} from './training-pattern';
 
 export class NeuralNetwork {
     private layers: Neuron[][];

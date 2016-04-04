@@ -7,46 +7,45 @@ export class NeuralNetwork {
     private neuronalBias: number = 1;
     private initialWeightRange: number = 1;
     private realLearningRate: number = NaN;
-    private hiddenLayers: number = 2;
+    private numberOfLayers: number = 2;
 
     constructor(inputs: number, outputs: number, neuronsPerLayer: number = 50) {
         this.layers = [];
-
-        this.layers[0] = this.createLayer(neuronsPerLayer, inputs, this.neuronalBias, this.initialWeightRange);
-        for (let i: number = 1; i < this.hiddenLayers; i++) {
+        
+        for (let i: number = 0; i < this.numberOfLayers; i++) {
             this.layers[i] = this.createLayer(neuronsPerLayer, inputs, this.neuronalBias, this.initialWeightRange);
         }
-        this.layers[this.hiddenLayers] = this.createLayer(outputs, neuronsPerLayer, this.neuronalBias, this.initialWeightRange);
+        
+        this.layers[this.numberOfLayers] = this.createLayer(outputs, neuronsPerLayer, this.neuronalBias, this.initialWeightRange);
     }
 
-    private createLayer(neurons: number, inputs: number, bias: number, weightRange: number): Neuron[] {
+    private createLayer(neuronsCount: number, inputCount: number, bias: number, weightRange: number): Neuron[] {
         var layer: Neuron[] = new Array<Neuron>();
-        
-        for (let i: number = 0; i < neurons; i++) {
-            var neuron: Neuron = new Neuron(inputs, bias, weightRange);
+
+        for (let i: number = 0; i < neuronsCount; i++) {
+            var neuron: Neuron = new Neuron(inputCount, bias, weightRange);
             layer.push(neuron);
         }
-        
+
         return layer;
     }
 
-
-    run(inputArray: number[]): number[] {
+    run(input: number[]): number[] {
         var layerOutputs: number[][] = [];
-        
+
         for (let i: number = 0; i <= this.layers.length; i++) {
             layerOutputs[i] = [];
         }
 
-        var inputs: number[] = inputArray;
+        var inputs: number[] = input;
         for (let i = 0; i < this.layers.length; i++) {
             var output: number[] = layerOutputs[i + 1];
 
             this.layers[i].forEach((neuron: Neuron) => {
-                var calculationResult = neuron.calculateValue(inputs);
-                output.push(calculationResult);
+                neuron.calculateOutputValue(inputs);
+                output.push(neuron.outputValue);
             });
-            
+
             inputs = output;
         }
 
@@ -91,7 +90,7 @@ export class NeuralNetwork {
             var layer: Neuron[] = this.layers[l];
 
             error[l] = [];
-            for (var i: number = 0; i < layer[0].size; i++) {
+            for (var i: number = 0; i < layer[0].layerSize; i++) {
                 error[l].push(0);
             }
 
@@ -100,16 +99,16 @@ export class NeuralNetwork {
                 var neuron: Neuron = layer[n];
 
                 if (l == layerCount) {
-                    nError = outputArray[n] - neuron.value;
+                    nError = outputArray[n] - neuron.outputValue;
                     MSEsum += nError * nError;
                 } else {
                     nError = error[l + 1][n];
                 }
-                
+
                 neuron.adjustWeights(nError, learningRate, this.momentum, error[l]);
             }
         }
-        
+
         return MSEsum / (this.layers[layerCount].length);
     }
 

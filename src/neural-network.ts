@@ -1,22 +1,30 @@
 import {Neuron} from './neuron';
 import {TrainingPattern} from './training-pattern';
 
+export interface NeuralNetworkSettings {
+    inputCount: number;
+    outputCount: number;
+    numberOfHiddenLayers: number; // default: 1
+    neuronsPerLayer: number; // default: 50
+    initialWeightRange: number; // default: 1
+    neuronalBias: number; // default: 1
+}
+
 export class NeuralNetwork {
     private layers: Neuron[][];
     private momentum: number = 0.5;
-    private neuronalBias: number = 1;
-    private initialWeightRange: number = 1;
     private realLearningRate: number = NaN;
-    private numberOfLayers: number = 2;
 
-    constructor(inputs: number, outputs: number, neuronsPerLayer: number = 50) {
+    constructor(s: NeuralNetworkSettings) {
         this.layers = [];
         
-        for (let i: number = 0; i < this.numberOfLayers; i++) {
-            this.layers[i] = this.createLayer(neuronsPerLayer, inputs, this.neuronalBias, this.initialWeightRange);
+        var numberOfLayers = s.numberOfHiddenLayers + 2;
+        
+        for (let i: number = 0; i < numberOfLayers - 1; i++) {
+            this.layers[i] = this.createLayer(s.neuronsPerLayer, s.inputCount, s.neuronalBias, s.initialWeightRange);
         }
         
-        this.layers[this.numberOfLayers] = this.createLayer(outputs, neuronsPerLayer, this.neuronalBias, this.initialWeightRange);
+        this.layers[numberOfLayers - 1] = this.createLayer(s.outputCount, s.neuronsPerLayer, s.neuronalBias, s.initialWeightRange);
     }
 
     private createLayer(neuronsCount: number, inputCount: number, bias: number, weightRange: number): Neuron[] {

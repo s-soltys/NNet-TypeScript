@@ -1,6 +1,6 @@
 import * as assert from 'intern/chai!assert';
 import * as registerSuite from 'intern!object';
-import {Neuron, NeuralNetwork, TrainingPattern} from '../../src/nnet';
+import {Neuron, NeuralNetwork, NeuralNetworkSettings, TrainingPattern} from '../../src/nnet';
 
 function assertEqual(actual: number[], expected: number[], delta: number) {
     assert.strictEqual(actual.length, expected.length);
@@ -20,7 +20,16 @@ registerSuite({
     },
 
     canBeTrainedUsingSimplePatterns: function() {
-        var network: NeuralNetwork = new NeuralNetwork(3, 2, 50);
+        var settings: NeuralNetworkSettings = {
+            inputCount: 3,
+            outputCount: 2,
+            numberOfHiddenLayers: 1,
+            neuronsPerLayer: 50,
+            initialWeightRange: 1,
+            neuronalBias: 1
+        }
+
+        var network: NeuralNetwork = new NeuralNetwork(settings);
 
         var patterns: TrainingPattern[] = [
             { input: [1, 1, 1], output: [1, 1] },

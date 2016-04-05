@@ -62,6 +62,10 @@ export class NeuralNetwork {
     }
 
     train(patterns: TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): number {
+        return this.trainWithGeneratedPatterns(() => NeuralNetwork.shufflePatterns(patterns), epochs, learningRate, targetMSE);
+    }
+
+    trainWithGeneratedPatterns(generatePatterns: () => TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): number {
         if (isNaN(this.realLearningRate)) {
             this.realLearningRate = learningRate;
         }
@@ -70,8 +74,7 @@ export class NeuralNetwork {
         for (let epoch = 0; epoch < epochs; epoch++) {
             measuredMSE = 0;
             
-            patterns = NeuralNetwork.shufflePatterns(patterns);
-
+            let patterns = generatePatterns();
             patterns.forEach(pattern => {
                 this.run(pattern.input);
                 measuredMSE += this.adjust(pattern.output, this.realLearningRate);

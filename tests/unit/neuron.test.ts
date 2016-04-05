@@ -24,7 +24,7 @@ registerSuite({
             inputCount: 3,
             outputCount: 2,
             numberOfHiddenLayers: 1,
-            neuronsPerLayer: 50,
+            neuronsPerLayer: 30,
             initialWeightRange: 1,
             neuronalBias: 1
         }
@@ -40,14 +40,14 @@ registerSuite({
             { input: [0, 0, 1], output: [0, 0] },
             { input: [0, 0, 0], output: [0, 0] },
             { input: [0.9, 0.9, 0.9], output: [1, 1] },
-            { input: [0.9, 0.9, 0], output: [1, 0] },
-            { input: [0, 0.9, 0.9], output: [0, 1] },
-            { input: [0, 0, 0], output: [0, 0] },
+            { input: [0.9, 0.9, 0.0], output: [1, 0] },
+            { input: [0.0, 0.9, 0.9], output: [0, 1] },
+            { input: [0.0, 0.0, 0.0], output: [0, 0] }
         ];
 
-        network.train(patterns, 2000, 0.75, 0.025);
+        network.train(patterns, 1000, 0.75, 0.02);
 
-        var delta: number = 0.3;
+        var delta: number = 0.25;
 
         assertEqual(network.run([1, 1, 1]), [1, 1], delta);
         assertEqual(network.run([1, 1, 0]), [1, 0], delta);

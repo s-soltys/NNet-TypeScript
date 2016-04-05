@@ -18,7 +18,7 @@ export class Neuron {
 
         for (let i: number = 0; i < this.layerSize; i++) {
             this.inputs[i] = NaN;
-            this.weights[i] = (Math.random() * (weightRange + weightRange)) - weightRange;
+            this.weights[i] = (Math.random() * 2 * weightRange) - weightRange;
             this.momentums[i] = 0;
         }
     }
@@ -39,14 +39,19 @@ export class Neuron {
     }
     
     calculateOutputValue(currentInputs: number[]): void {
-        var sum: number = 0;
         this.inputs = currentInputs;
+        let weightedSum: number = 0;
          
         for (let i: number = 0; i < this.layerSize; i++) {
-            sum += this.weights[i] * this.inputs[i];
+            weightedSum += this.weights[i] * this.inputs[i];
         }
 
-        this.outputValue = 1 / (1 + Math.exp(-1 * (sum + this.bias)));
+        this.outputValue = Neuron.activate(weightedSum, this.bias);
+    }
+    
+    public static activate(value: number, bias: number): number {
+        let denominator = 1 + Math.exp(-1 * (value + bias));
+        return 1 / denominator;
     }
 
 }

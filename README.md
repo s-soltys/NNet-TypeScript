@@ -14,8 +14,7 @@ The backpropagation algorithm is used as the training function.
 
 1. Clone the repo
 2. Install npm dependencies with: `npm install`
-3. Compile TypeScript files with: `tsc`
-4. Run unit test: `npm test`
+3. Run unit test: `npm run test`
 
 #### Known issues
 

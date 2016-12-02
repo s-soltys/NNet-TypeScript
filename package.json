@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "./node_modules/.bin/intern-client config=intern"
+    "test": "tsc && intern-client config=intern"
   },
   "typescript": {
     "definition": "index.d.ts"

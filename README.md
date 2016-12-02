@@ -25,4 +25,4 @@ Example training time:
 
 #### Roadmap
 * Implement an option to export and import the network settings.
-* Open to suggestions if anybody is intersted.
+* Open to suggestions if anybody is interested.

@@ -1,12 +1,19 @@
 {
-	"compilerOptions": {
-		"declaration": true,
-		"module": "amd",
-		"target": "es5",
-		"noImplicitAny": false,
-		"outDir": "dist"
-	},
-    "exclude": [
-        "node_modules"
+    "compilerOptions": {
+		"outDir": "dist",
+        "target": "es5",
+        "module": "amd",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "sourceMap": true,
+        "allowJs": true
+    },
+    "include": [
+        "src/**/*",
+        "tests/**/*"
     ]
 }

@@ -1,6 +1,7 @@
+import 'intern';
 import * as assert from 'intern/chai!assert';
 import * as registerSuite from 'intern!object';
-import {Neuron, NeuralNetwork, NeuralNetworkSettings, TrainingPattern} from '../../src/nnet';
+import { Neuron, NeuralNetwork, NeuralNetworkSettings, TrainingPattern } from '../../src/nnet';
 
 function assertEqual(actual: number[], expected: number[], delta: number) {
     assert.strictEqual(actual.length, expected.length);

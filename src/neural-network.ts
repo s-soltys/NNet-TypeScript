@@ -1,5 +1,6 @@
-import {Neuron} from './neuron';
-import {TrainingPattern} from './training-pattern';
+import { Neuron } from './neuron';
+import { TrainingPattern } from './training-pattern';
+import { shuffle } from './util';
 
 export interface NeuralNetworkSettings {
     inputCount: number;
@@ -18,7 +19,7 @@ export class NeuralNetwork {
     constructor(s: NeuralNetworkSettings) {
         this.layers = [];
 
-        var numberOfLayers = s.numberOfHiddenLayers + 2;
+        let numberOfLayers = s.numberOfHiddenLayers + 2;
 
         for (let i: number = 0; i < numberOfLayers - 1; i++) {
             this.layers[i] = this.createLayer(s.neuronsPerLayer, s.inputCount, s.neuronalBias, s.initialWeightRange);
@@ -28,10 +29,10 @@ export class NeuralNetwork {
     }
 
     private createLayer(neuronsCount: number, inputCount: number, bias: number, weightRange: number): Neuron[] {
-        var layer: Neuron[] = new Array<Neuron>();
+        let layer: Neuron[] = [];
 
         for (let i: number = 0; i < neuronsCount; i++) {
-            var neuron: Neuron = new Neuron(inputCount, bias, weightRange);
+            let neuron = new Neuron(inputCount, bias, weightRange);
             layer.push(neuron);
         }
 
@@ -39,18 +40,18 @@ export class NeuralNetwork {
     }
 
     run(input: number[]): number[] {
-        var layerOutputs: number[][] = [];
+        let layerOutputs: number[][] = [];
 
         for (let i: number = 0; i <= this.layers.length; i++) {
             layerOutputs[i] = [];
         }
 
-        var inputForCurrentLayer: number[] = input;
+        let inputForCurrentLayer: number[] = input;
         for (let layerIndex = 0; layerIndex < this.layers.length; layerIndex++) {
             let currentLayer = this.layers[layerIndex];
             let outputForCurrentLayer = layerOutputs[layerIndex + 1];
 
-            currentLayer.forEach((neuron: Neuron) => {
+            currentLayer.forEach(neuron => {
                 neuron.calculateOutputValue(inputForCurrentLayer);
                 outputForCurrentLayer.push(neuron.outputValue);
             });
@@ -61,19 +62,18 @@ export class NeuralNetwork {
         return layerOutputs[layerOutputs.length - 1];
     }
 
-    train(patterns: TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): number {
-        return this.trainWithGeneratedPatterns(() => NeuralNetwork.shufflePatterns(patterns), epochs, learningRate, targetMSE);
+    train(patterns: TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): void {
+        this.trainWithGeneratedPatterns(() => NeuralNetwork.shufflePatterns(patterns), epochs, learningRate, targetMSE);
     }
 
-    trainWithGeneratedPatterns(generatePatterns: () => TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): number {
-        if (isNaN(this.realLearningRate)) {
+    trainWithGeneratedPatterns(generatePatterns: () => TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): void {
+        if (Number.isNaN(this.realLearningRate)) {
             this.realLearningRate = learningRate;
         }
 
-        let measuredMSE: number;
         for (let epoch = 0; epoch < epochs; epoch++) {
-            measuredMSE = 0;
-            
+            let measuredMSE = 0;
+
             let patterns = generatePatterns();
             patterns.forEach(pattern => {
                 this.run(pattern.input);
@@ -81,33 +81,31 @@ export class NeuralNetwork {
             });
 
             measuredMSE = measuredMSE / patterns.length;
-            
+
             this.realLearningRate = learningRate * measuredMSE;
 
             if (measuredMSE <= targetMSE) {
                 break;
             }
         }
-
-        return measuredMSE;
     }
 
     private adjust(outputArray: number[], learningRate: number): number {
-        var MSEsum: number = 0;
-        var layerCount: number = this.layers.length - 1;
-        var error: number[][] = [];
+        let MSEsum = 0;
+        let layerCount = this.layers.length - 1;
+        let error: number[][] = [];
 
         for (let l: number = layerCount; l >= 0; --l) {
-            var layer: Neuron[] = this.layers[l];
+            let layer = this.layers[l];
 
             error[l] = [];
             for (let i: number = 0; i < layer[0].layerSize; i++) {
                 error[l].push(0);
             }
 
-            var nError: number = 0;
+            let nError = 0;
             for (let n: number = 0; n < layer.length; n++) {
-                var neuron: Neuron = layer[n];
+                let neuron = layer[n];
 
                 if (l == layerCount) {
                     nError = outputArray[n] - neuron.outputValue;
@@ -123,15 +121,8 @@ export class NeuralNetwork {
         return MSEsum / (this.layers[layerCount].length);
     }
 
-    public static shufflePatterns(array: TrainingPattern[]): TrainingPattern[] {
-        for (let i: number = 0; i < array.length; i++) {
-            var randomIndex: number = Math.floor(Math.random() * array.length)
-            var randomElement: TrainingPattern = array[i];
-            array[i] = array[randomIndex];
-            array[randomIndex] = randomElement;
-        }
-        
-        return array;
+    static shufflePatterns(array: TrainingPattern[]): TrainingPattern[] {
+        return shuffle(array);
     }
-    
+
 }

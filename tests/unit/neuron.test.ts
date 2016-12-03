@@ -2,26 +2,18 @@ import 'intern';
 import * as assert from 'intern/chai!assert';
 import * as registerSuite from 'intern!object';
 import { Neuron, NeuralNetwork, NeuralNetworkSettings, TrainingPattern } from '../../src/nnet';
-
-function assertEqual(actual: number[], expected: number[], delta: number) {
-    assert.strictEqual(actual.length, expected.length);
-
-    for (let i = 0; i < actual.length; i++) {
-        var diff: number = Math.abs(expected[i] - actual[i]);
-        assert.isBelow(diff, delta, `Wrong result, expected ${JSON.stringify(expected)}, actual ${JSON.stringify(actual)}. `);
-    }
-}
+import { assertArraysSimilar } from '../util/assertions';
 
 registerSuite({
     name: 'NeuralNetwork',
 
-    canInstantiateANeuron: function() {
-        var neuron: Neuron = new Neuron(0, 0, 0);
+    'canInstantiateANeuron': function () {
+        let neuron = new Neuron(0, 0, 0);
         assert.isNotNull(neuron);
     },
 
-    canBeTrainedUsingSimplePatterns: function() {
-        var network: NeuralNetwork = new NeuralNetwork({
+    'canBeTrainedUsingSimplePatterns': function () {
+        let network: NeuralNetwork = new NeuralNetwork({
             inputCount: 3,
             outputCount: 2,
             numberOfHiddenLayers: 1,
@@ -30,7 +22,7 @@ registerSuite({
             neuronalBias: 1
         });
 
-        var patterns: TrainingPattern[] = [
+        let patterns: TrainingPattern[] = [
             { input: [1, 1, 1], output: [1, 1] },
             { input: [1, 1, 0], output: [1, 0] },
             { input: [0, 1, 1], output: [0, 1] },
@@ -46,18 +38,18 @@ registerSuite({
 
         network.train(patterns, 1000, 0.75, 0.02);
 
-        var delta: number = 0.25;
-        assertEqual(network.run([1, 1, 1]), [1, 1], delta);
-        assertEqual(network.run([1, 1, 0]), [1, 0], delta);
-        assertEqual(network.run([0, 1, 1]), [0, 1], delta);
-        assertEqual(network.run([1, 0, 0]), [0, 0], delta);
-        assertEqual(network.run([0, 1, 0]), [0, 0], delta);
-        assertEqual(network.run([0, 0, 1]), [0, 0], delta);
-        assertEqual(network.run([0, 0, 0]), [0, 0], delta);
+        let delta: number = 0.3;
+        assertArraysSimilar(network.run([1, 1, 1]), [1, 1], delta);
+        assertArraysSimilar(network.run([1, 1, 0]), [1, 0], delta);
+        assertArraysSimilar(network.run([0, 1, 1]), [0, 1], delta);
+        assertArraysSimilar(network.run([1, 0, 0]), [0, 0], delta);
+        assertArraysSimilar(network.run([0, 1, 0]), [0, 0], delta);
+        assertArraysSimilar(network.run([0, 0, 1]), [0, 0], delta);
+        assertArraysSimilar(network.run([0, 0, 0]), [0, 0], delta);
     },
 
-    canBeTrainedUsingRandomlyGeneratedPatterns: function() {
-        var network: NeuralNetwork = new NeuralNetwork({
+    'canBeTrainedUsingRandomlyGeneratedPatterns': function () {
+        let network: NeuralNetwork = new NeuralNetwork({
             inputCount: 2,
             outputCount: 2,
             numberOfHiddenLayers: 1,
@@ -66,7 +58,7 @@ registerSuite({
             neuronalBias: 1
         });
 
-        var generatePatterns = (function() {
+        let generatePatterns = (function () {
             let g1 = () => 1 - 0.2 * Math.random();
             let g0 = () => 0.2 * Math.random();
             return () => NeuralNetwork.shufflePatterns([
@@ -79,11 +71,11 @@ registerSuite({
 
         network.trainWithGeneratedPatterns(generatePatterns, 1000, 0.8, 0.015);
 
-        var delta: number = 0.25;
-        assertEqual(network.run([1, 1]), [1, 1], delta);
-        assertEqual(network.run([1, 0]), [0, 1], delta);
-        assertEqual(network.run([0, 1]), [1, 0], delta);
-        assertEqual(network.run([0, 0]), [1, 1], delta);
+        let delta: number = 0.3;
+        assertArraysSimilar(network.run([1, 1]), [1, 1], delta);
+        assertArraysSimilar(network.run([1, 0]), [0, 1], delta);
+        assertArraysSimilar(network.run([0, 1]), [1, 0], delta);
+        assertArraysSimilar(network.run([0, 0]), [1, 1], delta);
     }
 
 });

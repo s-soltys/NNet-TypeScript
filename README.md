@@ -16,7 +16,7 @@ npm install --save nnet-typescript
 
 ### How to use
 Example implementation of a XOR function:
-```
+```typescript
 // Create the Neural Network
 let nnet: NeuralNetwork = new NeuralNetwork({
     inputCount: 2,

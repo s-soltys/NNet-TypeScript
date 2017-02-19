@@ -18,13 +18,13 @@ npm install --save nnet-typescript
 Example implementation of a XOR function:
 ```
 // Create the Neural Network
-let network: NeuralNetwork = new NeuralNetwork({
+let nnet: NeuralNetwork = new NeuralNetwork({
     inputCount: 2,
     outputCount: 1,
-    numberOfHiddenLayers: 1,
-    neuronsPerLayer: 20,
+    numberOfHiddenLayers: 0,
+    neuronsPerLayer: 30,
     initialWeightRange: 1,
-    neuronalBias: 1
+    neuronalBias: 0.5
 });
 
 // XOR truth table
@@ -38,12 +38,12 @@ let patterns: TrainingPattern[] = [
 // training the network using the generated patterns
 // Training parameters:
 // Pattern generation function, shuffle patterns in each epoch, number of epochs, learning rate, target MSE
-network.train(() => patterns, true, 3000, 0.6, 0.05);
+nnet.train(() => patterns, true, 2000, 0.8, 0.001);
 
 // Expected results
-const delta = 0.05;
-expect(network.run([1, 1])).toBeCloseTo(0, delta);
-expect(network.run([1, 0])).toBeCloseTo(1, delta);
-expect(network.run([0, 1])).toBeCloseTo(1, delta);
-expect(network.run([0, 0])).toBeCloseTo(0, delta);
+const delta = 0.2;
+assertNetworkResult(nnet, [1, 1], 0, delta);
+assertNetworkResult(nnet, [1, 0], 1, delta);
+assertNetworkResult(nnet, [0, 1], 1, delta);
+assertNetworkResult(nnet, [0, 0], 0, delta);
 ```

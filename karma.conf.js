@@ -9,7 +9,7 @@ module.exports = function (config) {
         frameworks: ["jasmine", "karma-typescript"],
         files: [
             { pattern: "src/**/*.ts" },
-            { pattern: "tests/**/*.ts" },
+            { pattern: "test/**/*.ts" },
         ],
         preprocessors: {
             "**/*.ts": ["karma-typescript"],

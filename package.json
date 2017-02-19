@@ -1,8 +1,9 @@
 {
   "name": "nnet-typescript",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "A simple neural network library for TypeScript.",
   "main": "dist/nnet.js",
+  "typings": "dist/nnet.d.ts",
   "directories": {
     "test": "test"
   },

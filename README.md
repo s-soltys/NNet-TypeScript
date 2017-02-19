@@ -11,7 +11,7 @@ The backpropagation algorithm is used as the training function.
 
 ### How to install
 ```
-npm install --save-dev nnet-typescript
+npm install --save nnet-typescript
 ```
 
 ### How to use

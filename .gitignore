@@ -1,6 +1,5 @@
 node_modules/
 dist/
 coverage/
-*.d.ts
 *.log
 *.tgz

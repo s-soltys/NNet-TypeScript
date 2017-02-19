@@ -7,10 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "prepublish": "tsc",
     "build": "tsc",
-    "build-watch": "tsc --watch",
-    "test": "tsc && intern-client config=intern"
+    "test-watch": "karma start --no-single-run",
+    "test": "karma start"
   },
   "typescript": {
     "definition": "index.d.ts"
@@ -30,17 +29,14 @@
     "url": "https://github.com/s-soltys/NNet-TypeScript/issues"
   },
   "homepage": "https://github.com/s-soltys/NNet-TypeScript#readme",
-  "dependencies": {
-    "autodts": "^0.0.6"
-  },
   "devDependencies": {
-    "intern": "^3.0.6",
+    "@types/jasmine": "^2.5.35",
     "jasmine-core": "^2.4.1",
-    "karma": "^0.13.22",
-    "karma-chrome-launcher": "^0.2.3",
-    "karma-jasmine": "^0.3.8",
-    "karma-typescript-preprocessor": "0.0.21",
-    "typescript": "^2.0.10",
-    "typings": "^2.0.0"
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-jasmine": "^1.0.2",
+    "karma-typescript": "2.1.7",
+    "typescript": "^2.1.6"
   }
 }

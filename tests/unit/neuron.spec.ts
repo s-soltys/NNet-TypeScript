@@ -1,26 +1,22 @@
-import 'intern';
-import * as assert from 'intern/chai!assert';
-import * as registerSuite from 'intern!object';
 import { Neuron, NeuralNetwork, NeuralNetworkSettings, TrainingPattern } from '../../src/nnet';
 import { assertArraysSimilar } from '../util/assertions';
 
-registerSuite({
-    name: 'NeuralNetwork',
+describe("NeuralNetwork should", () => {
 
-    'canInstantiateANeuron': function () {
+    it('canInstantiateANeuron', () => {
         let neuron = new Neuron(0, 0, 0);
-        assert.isNotNull(neuron);
-    },
+        expect(neuron).not.toBeNull();
+    }),
 
-    'neuronalActivationFunctionIsClamped': () => {
-        let ret0 = Neuron.activate(0, 1);
-        let ret1 = Neuron.activate(1, 1);
+    // xit('neuronalActivationFunctionIsClamped', () => {
+    //     let ret0 = Neuron.activate(0, 1);
+    //     let ret1 = Neuron.activate(1, 1);
 
-        assert.closeTo(ret0, 0, 0.01);
-        // assert.closeTo(ret1, 1, 0.01);
-    },
+    //     expect(ret0).toBeCloseTo(0, 0.01);
+    //     expect(ret1).toBeCloseTo(1, 0.01);
+    // }),
 
-    'canBeTrainedUsingSimplePatterns': function () {
+    it('canBeTrainedUsingSimplePatterns', () => {
         let network: NeuralNetwork = new NeuralNetwork({
             inputCount: 3,
             outputCount: 2,
@@ -44,9 +40,9 @@ registerSuite({
             { input: [0.0, 0.0, 0.0], output: [0, 0] }
         ];
 
-        network.train(patterns, 1000, 0.75, 0.02);
+        network.train(() => patterns, true, 500, 0.8, 0.01);
 
-        let delta: number = 0.3;
+        let delta: number = 0.1;
         assertArraysSimilar(network.run([1, 1, 1]), [1, 1], delta);
         assertArraysSimilar(network.run([1, 1, 0]), [1, 0], delta);
         assertArraysSimilar(network.run([0, 1, 1]), [0, 1], delta);
@@ -54,9 +50,9 @@ registerSuite({
         assertArraysSimilar(network.run([0, 1, 0]), [0, 0], delta);
         assertArraysSimilar(network.run([0, 0, 1]), [0, 0], delta);
         assertArraysSimilar(network.run([0, 0, 0]), [0, 0], delta);
-    },
+    })
 
-    'canBeTrainedUsingRandomlyGeneratedPatterns': function () {
+    it('canBeTrainedUsingRandomlyGeneratedPatterns', () => {
         let network: NeuralNetwork = new NeuralNetwork({
             inputCount: 2,
             outputCount: 2,
@@ -66,24 +62,24 @@ registerSuite({
             neuronalBias: 1
         });
 
-        let generatePatterns = (function () {
-            let g1 = () => 1 - 0.2 * Math.random();
-            let g0 = () => 0.2 * Math.random();
-            return () => NeuralNetwork.shufflePatterns([
+        const variability = 0.1;
+        let generatePatterns = () => {
+            let g1 = () => 1 - variability * Math.random();
+            let g0 = () => variability * Math.random();
+            return [
                 { input: [g1(), g1()], output: [1, 1] },
                 { input: [g1(), g0()], output: [0, 1] },
                 { input: [g0(), g1()], output: [1, 0] },
                 { input: [g0(), g0()], output: [1, 1] }
-            ]);
-        } ());
+            ];
+        };
 
-        network.trainWithGeneratedPatterns(generatePatterns, 1000, 0.8, 0.015);
+        network.train(generatePatterns, true, 3000, 0.8, 0.01);
 
-        let delta: number = 0.3;
+        let delta: number = 0.1;
         assertArraysSimilar(network.run([1, 1]), [1, 1], delta);
         assertArraysSimilar(network.run([1, 0]), [0, 1], delta);
         assertArraysSimilar(network.run([0, 1]), [1, 0], delta);
         assertArraysSimilar(network.run([0, 0]), [1, 1], delta);
-    }
-
+    });
 });

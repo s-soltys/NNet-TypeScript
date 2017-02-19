@@ -1,31 +1,23 @@
-import { Neuron } from './neuron';
-import { TrainingPattern } from './training-pattern';
-import { shuffle } from './util';
-
-export interface NeuralNetworkSettings {
-    inputCount: number;
-    outputCount: number;
-    numberOfHiddenLayers: number; // default: 1
-    neuronsPerLayer: number; // default: 50
-    initialWeightRange: number; // default: 1
-    neuronalBias: number; // default: 1
-}
+import { TrainingPattern } from './training';
+import { NeuralNetworkSettings } from './settings';
+import { Neuron } from './../neuron/neuron';
+import { shuffle } from '../utils/shuffle-array';
 
 export class NeuralNetwork {
     private layers: Neuron[][];
     private momentum: number = 0.5;
-    private realLearningRate: number = NaN;
+    private realLearningRate: number = Number.NaN;
 
-    constructor(s: NeuralNetworkSettings) {
+    constructor(private nnSettings: NeuralNetworkSettings) {
         this.layers = [];
 
-        let numberOfLayers = s.numberOfHiddenLayers + 2;
+        let numberOfLayers = nnSettings.numberOfHiddenLayers + 2;
 
         for (let i: number = 0; i < numberOfLayers - 1; i++) {
-            this.layers[i] = this.createLayer(s.neuronsPerLayer, s.inputCount, s.neuronalBias, s.initialWeightRange);
+            this.layers[i] = this.createLayer(nnSettings.neuronsPerLayer, nnSettings.inputCount, nnSettings.neuronalBias, nnSettings.initialWeightRange);
         }
 
-        this.layers[numberOfLayers - 1] = this.createLayer(s.outputCount, s.neuronsPerLayer, s.neuronalBias, s.initialWeightRange);
+        this.layers[numberOfLayers - 1] = this.createLayer(nnSettings.outputCount, nnSettings.neuronsPerLayer, nnSettings.neuronalBias, nnSettings.initialWeightRange);
     }
 
     private createLayer(neuronsCount: number, inputCount: number, bias: number, weightRange: number): Neuron[] {
@@ -62,19 +54,15 @@ export class NeuralNetwork {
         return layerOutputs[layerOutputs.length - 1];
     }
 
-    train(patterns: TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): void {
-        this.trainWithGeneratedPatterns(() => NeuralNetwork.shufflePatterns(patterns), epochs, learningRate, targetMSE);
-    }
-
-    trainWithGeneratedPatterns(generatePatterns: () => TrainingPattern[], epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): void {
-        if (Number.isNaN(this.realLearningRate)) {
+    train(getPatterns: () => TrainingPattern[], shufflePatterns: boolean = false, epochs: number = 50, learningRate: number = 0.5, targetMSE: number = 0.025): void {
+        if (isNaN(this.realLearningRate)) {
             this.realLearningRate = learningRate;
         }
 
         for (let epoch = 0; epoch < epochs; epoch++) {
             let measuredMSE = 0;
 
-            let patterns = generatePatterns();
+            let patterns = shufflePatterns ? shuffle(getPatterns()) : getPatterns();
             patterns.forEach(pattern => {
                 this.run(pattern.input);
                 measuredMSE += this.adjust(pattern.output, this.realLearningRate);
@@ -120,9 +108,4 @@ export class NeuralNetwork {
 
         return MSEsum / (this.layers[layerCount].length);
     }
-
-    static shufflePatterns(array: TrainingPattern[]): TrainingPattern[] {
-        return shuffle(array);
-    }
-
 }

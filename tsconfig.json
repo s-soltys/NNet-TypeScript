@@ -9,7 +9,7 @@
         "module": "amd",
         "moduleResolution": "node",
         "noImplicitAny": false,
-        "removeComments": true,
+        "removeComments": false,
         "preserveConstEnums": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,

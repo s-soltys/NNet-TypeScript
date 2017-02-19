@@ -1,4 +1,6 @@
 # NNet-TypeScript
+![travis build results](https://travis-ci.org/s-soltys/NNet-TypeScript.svg?branch=master)
+
 A simple Neural Network library written in TypeScript.
 
 This project was initially written in Action Script 3 as part of this project: https://github.com/s-soltys/LipSync

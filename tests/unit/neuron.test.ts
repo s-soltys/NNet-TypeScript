@@ -12,6 +12,14 @@ registerSuite({
         assert.isNotNull(neuron);
     },
 
+    'neuronalActivationFunctionIsClamped': () => {
+        let ret0 = Neuron.activate(0, 1);
+        let ret1 = Neuron.activate(1, 1);
+
+        assert.closeTo(ret0, 0, 0.01);
+        // assert.closeTo(ret1, 1, 0.01);
+    },
+
     'canBeTrainedUsingSimplePatterns': function () {
         let network: NeuralNetwork = new NeuralNetwork({
             inputCount: 3,

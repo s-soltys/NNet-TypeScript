@@ -2,12 +2,14 @@
   "name": "nnet-typescript",
   "version": "0.1.0",
   "description": "A simple neural network library for TypeScript.",
-  "main": "dist/nnet.js",
+  "main": "src/nnet.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "tsc --watch",
+    "prepublish": "build",
+    "build": "tsc",
+    "build-watch": "tsc --watch",
     "test": "tsc && intern-client config=intern"
   },
   "typescript": {

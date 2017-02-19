@@ -5,6 +5,6 @@ export function shuffle<T>(array: T[]): T[] {
         array[i] = array[randomIndex];
         array[randomIndex] = randomElement;
     }
-
+    
     return array;
 }

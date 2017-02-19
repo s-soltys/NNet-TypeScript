@@ -49,6 +49,8 @@ export class Neuron {
         this.outputValue = Neuron.activate(weightedSum, this.bias);
     }
 
-    static activate = (value: number, bias: number) => 1 / (1 + Math.exp(-(value + bias)));
+    static activate(value: number, bias: number) {
+        return 1 / (1 + Math.exp(-(value + bias)));
+    };
 
 }

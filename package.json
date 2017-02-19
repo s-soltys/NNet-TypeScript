@@ -1,8 +1,8 @@
 {
   "name": "nnet-typescript",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple neural network library for TypeScript.",
-  "main": "index.js",
+  "main": "dist/nnet.js",
   "directories": {
     "test": "test"
   },
@@ -11,9 +11,6 @@
     "build": "tsc",
     "test-watch": "karma start --no-single-run",
     "test": "karma start"
-  },
-  "typescript": {
-    "definition": "index.d.ts"
   },
   "repository": {
     "type": "git",
